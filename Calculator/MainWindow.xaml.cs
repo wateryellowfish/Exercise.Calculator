@@ -19,6 +19,7 @@ namespace Calculator
         Operation? operation;
         decimal firstValue;
         decimal secondValue;
+        bool IsDecimal = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -31,14 +32,31 @@ namespace Calculator
 
             try
             {
-                label_Result.Content = Convert.ToDecimal(label_Result.Content) * 10 + value;
+                if (IsDecimal == false) label_Result.Content = Convert.ToDecimal(label_Result.Content) * 10 + value;
+                else
+                {
+                    decimal number = Convert.ToDecimal(label_Result.Content);
+                    double decimalPlaces = 1;
+                    while (number % 1 != 0)
+                    {
+                        number *= 10;
+                        decimalPlaces++;
+                    }
+                    number = number * 10 + value;
+                    label_Result.Content = number / (decimal)(Math.Pow((double)10,decimalPlaces));
+                }
             }
             catch (OverflowException) {/*do nothing*/ }
+            catch (FormatException)
+            {
+                label_Result.Content = 0;
+            }
         }
 
         private void button_Clear_Click(object sender, RoutedEventArgs e)
         {
             label_Result.Content = 0;
+            firstValue = 0; secondValue = 0;
         }
 
         private void button_Negative_Click(object sender, RoutedEventArgs e)
@@ -57,16 +75,7 @@ namespace Calculator
 
         public decimal Addition(decimal firstNum, decimal secondNum)
         {
-            decimal result = 0;
-            try
-            {
-                result = firstNum + secondNum;
-            }
-            catch (OverflowException)
-            {
-                label_Result.Content = "Error: Overflow";
-            }
-            return result;
+            return firstNum + secondNum;
         }
 
         public decimal Subtraction(decimal firstNum, decimal secondNum)
@@ -74,18 +83,14 @@ namespace Calculator
             return firstNum - secondNum;
         }
 
-        private void button_Add_Click(object sender, RoutedEventArgs e)
+        public decimal Multiplication(decimal firstNum, decimal secondNum)
         {
-            operation = Addition;
-            firstValue = Convert.ToDecimal(label_Result.Content);
-            label_Result.Content = 0;
+            return firstNum * secondNum;
         }
 
-        private void button_Subtract_Click(object sender, RoutedEventArgs e)
+        public decimal Division(decimal firstNum, decimal secondNum)
         {
-            operation = Subtraction;
-            firstValue = Convert.ToDecimal(label_Result.Content);
-            label_Result.Content = 0;
+            return firstNum / secondNum;
         }
 
         private void button_Equals_Click(object sender, RoutedEventArgs e)
@@ -93,7 +98,41 @@ namespace Calculator
             if (operation == null) return;
 
             secondValue = Convert.ToDecimal(label_Result.Content);
-            label_Result.Content = operation(firstValue, secondValue);
+            try
+            {
+                label_Result.Content = operation(firstValue, secondValue);
+            }
+            catch (OverflowException)
+            {
+                label_Result.Content = "Error: Overflow";
+            }
+            catch (DivideByZeroException)
+            {
+                label_Result.Content = "Error: Can't divide by zero";
+            }
+            firstValue = 0; secondValue = 0;
+            operation = null;
+            IsDecimal = false;
+            label_FirstValue.Visibility = Visibility.Collapsed;
+        }
+
+        private void button_Operator_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender == button_Add) operation = Addition;
+            else if (sender == button_Subtract) operation = Subtraction;
+            else if (sender == button_Multiply) operation = Multiplication;
+            else if (sender == button_Divide) operation = Division;
+
+            firstValue = Convert.ToDecimal(label_Result.Content);
+            label_Result.Content = 0;
+            IsDecimal = false;
+            label_FirstValue.Visibility = Visibility.Visible;
+            label_FirstValue.Content = $"{firstValue} {((Button)sender).Content}";
+        }
+
+        private void button_Decimal_Click(object sender, RoutedEventArgs e)
+        {
+            IsDecimal = true;
         }
     }
 }

@@ -23,6 +23,14 @@
         </Grid.RowDefinitions>
         <Label Grid.ColumnSpan="4"
                Content="0" 
+               FontSize="20" 
+               Foreground="DarkGray"
+               Visibility="Collapsed"
+               HorizontalAlignment="Right" 
+               VerticalAlignment="Top"
+               x:Name="label_FirstValue"/>
+        <Label Grid.ColumnSpan="4"
+               Content="0" 
                FontSize="50" 
                HorizontalAlignment="Right" 
                VerticalAlignment="Bottom"
@@ -49,7 +57,8 @@
                 Grid.Column="3"
                 Margin="5"
                 Content="/"
-                />
+                x:Name="button_Divide"
+                Click="button_Operator_Click"/>
         <Button Grid.Row="2"
                 Grid.Column="0"
                 Margin="5"
@@ -72,7 +81,8 @@
                 Grid.Column="3"
                 Margin="5"
                 Content="*"
-                />
+                x:Name="button_Multiply"
+                Click="button_Operator_Click"/>
         <Button Grid.Row="3"
                 Grid.Column="0"
                 Margin="5"
@@ -96,7 +106,7 @@
                 Margin="5"
                 Content="-"
                 x:Name="button_Subtract"
-                Click="button_Subtract_Click"/>
+                Click="button_Operator_Click"/>
         <Button Grid.Row="4"
                 Grid.Column="0"
                 Margin="5"
@@ -120,7 +130,7 @@
                 Margin="5"
                 Content="+"
                 x:Name="button_Add"
-                Click="button_Add_Click"/>
+                Click="button_Operator_Click"/>
         <Button Grid.Row="5"
                 Grid.Column="0"
                 Margin="5"
@@ -132,7 +142,8 @@
                 Grid.Column="2"
                 Margin="5"
                 Content="."
-                />
+                x:Name="button_Decimal"
+                Click="button_Decimal_Click"/>
         <Button Grid.Row="5"
                 Grid.Column="3"
                 Margin="5"
