@@ -20,6 +20,7 @@ namespace Calculator
         decimal firstValue;
         decimal secondValue;
         bool IsDecimal = false;
+        int decimalPlace = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -36,14 +37,9 @@ namespace Calculator
                 else
                 {
                     decimal number = Convert.ToDecimal(label_Result.Content);
-                    double decimalPlaces = 1;
-                    while (number % 1 != 0)
-                    {
-                        number *= 10;
-                        decimalPlaces++;
-                    }
-                    number = number * 10 + value;
-                    label_Result.Content = number / (decimal)(Math.Pow((double)10,decimalPlaces));
+                    decimalPlace++;
+                    number = number + (value / (decimal)Math.Pow(10, (double)decimalPlace));
+                    label_Result.Content = number.ToString($"f{decimalPlace}");
                 }
             }
             catch (OverflowException) {/*do nothing*/ }
@@ -57,6 +53,8 @@ namespace Calculator
         {
             label_Result.Content = 0;
             firstValue = 0; secondValue = 0;
+            IsDecimal = false;
+            decimalPlace = 0;
         }
 
         private void button_Negative_Click(object sender, RoutedEventArgs e)
@@ -113,6 +111,7 @@ namespace Calculator
             firstValue = 0; secondValue = 0;
             operation = null;
             IsDecimal = false;
+            decimalPlace = 0;
             label_FirstValue.Visibility = Visibility.Collapsed;
         }
 
@@ -126,6 +125,7 @@ namespace Calculator
             firstValue = Convert.ToDecimal(label_Result.Content);
             label_Result.Content = 0;
             IsDecimal = false;
+            decimalPlace = 0;
             label_FirstValue.Visibility = Visibility.Visible;
             label_FirstValue.Content = $"{firstValue} {((Button)sender).Content}";
         }
