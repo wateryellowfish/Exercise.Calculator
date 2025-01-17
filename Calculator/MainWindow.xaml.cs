@@ -43,18 +43,11 @@ namespace Calculator
                 }
             }
             catch (OverflowException) {/*do nothing*/ }
-            catch (FormatException)
-            {
-                label_Result.Content = 0;
-            }
         }
 
         private void button_Clear_Click(object sender, RoutedEventArgs e)
         {
-            label_Result.Content = 0;
-            firstValue = 0; secondValue = 0;
-            IsDecimal = false;
-            decimalPlace = 0;
+            ToDefault();
         }
 
         private void button_Negative_Click(object sender, RoutedEventArgs e)
@@ -102,11 +95,13 @@ namespace Calculator
             }
             catch (OverflowException)
             {
-                label_Result.Content = "Error: Overflow";
+                MessageBox.Show("Number exceeded limit.", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                ToDefault();
             }
             catch (DivideByZeroException)
             {
-                label_Result.Content = "Error: Can't divide by zero";
+                MessageBox.Show("Can't divide by zero.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ToDefault() ;
             }
             firstValue = 0; secondValue = 0;
             operation = null;
@@ -133,6 +128,14 @@ namespace Calculator
         private void button_Decimal_Click(object sender, RoutedEventArgs e)
         {
             IsDecimal = true;
+        }
+
+        private void ToDefault()
+        {
+            label_Result.Content = 0;
+            firstValue = 0; secondValue = 0;
+            IsDecimal = false;
+            decimalPlace = 0;
         }
     }
 }
